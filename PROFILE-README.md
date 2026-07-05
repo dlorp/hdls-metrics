@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./hdls-banner.svg" width="640" alt="HDLS" />
+  <img src="./hdls-banner.png" width="640" alt="HDLS" />
 </p>
 
 ---
