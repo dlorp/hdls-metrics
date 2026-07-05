@@ -1,0 +1,121 @@
+name: Daily Repo Scan
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 08:00 UTC
+  workflow_dispatch:      # Manual trigger
+
+permissions:
+  contents: write
+  repository-projects: read
+
+jobs:
+  scan-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout metrics repo
+        uses: actions/checkout@v4
+
+      - name: Scan all dlorp repos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Scanning dlorp/* repos..."
+          REPOS=$(gh api "users/dlorp/repos?per_page=100&sort=updated" --paginate --jq '.[].name')
+
+          echo '{"repos":[' > repo-data.json
+          FIRST=true
+
+          for REPO in $REPOS; do
+            # Skip the metrics repo itself and the profile config repo
+            if [ "$REPO" = "hdls-metrics" ] || [ "$REPO" = "dlorp" ]; then
+              continue
+            fi
+
+            echo "  Scanning: $REPO"
+
+            # Get repo metadata
+            DATA=$(gh api "repos/dlorp/$REPO" --jq '{
+              name: .name,
+              description: (.description // ""),
+              homepage: (.homepage // ""),
+              language: (.language // ""),
+              language_url: (.language_url // ""),
+              stars: .stargazers_count,
+              forks: .forks_count,
+              watchers: .subscribers_count,
+              open_issues: .open_issues_count,
+              size_kb: .size,
+              created_at: .created_at,
+              updated_at: .updated_at,
+              pushed_at: .pushed_at,
+              archived: .archived,
+              disabled: .disabled,
+              topics: .topics,
+              license: (.license.spdx_id // ""),
+              visibility: .visibility,
+              default_branch: .default_branch
+            }')
+
+            # Get latest release (if any)
+            RELEASE=$(gh api "repos/dlorp/$REPO/releases/latest" --jq '{tag: .tag_name, published: .published_at, name: (.name // .tag_name)}' 2>/dev/null || echo '{"tag":"","published":"","name":""}')
+
+            # Get language breakdown
+            LANGS=$(gh api "repos/dlorp/$REPO/languages" --jq 'to_entries | sort_by(-.value) | map(.key) | .[0:5]')
+
+            # Get last 7 days of commits
+            WEEK_COMMITS=$(gh api "repos/dlorp/$REPO/commits?since=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)&per_page=1" -I 2>/dev/null | grep -i 'link:' | grep -oP '&page=\K[0-9]+(?=>; rel="last")' || echo "0")
+            if [ -z "$WEEK_COMMITS" ] || [ "$WEEK_COMMITS" = "0" ]; then
+              # Fallback: count commits directly (slower but accurate for small repos)
+              WEEK_COMMITS=$(gh api "repos/dlorp/$REPO/commits?since=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)&per_page=100" --jq 'length')
+            fi
+
+            # Combine into JSON object
+            COMBINED=$(echo "$DATA" | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          release = json.loads('''$RELEASE''')
+          langs = json.loads('''$LANGS''')
+          data['latest_release'] = release
+          data['languages_top5'] = langs
+          data['commits_7d'] = int('''$WEEK_COMMITS''')
+          print(json.dumps(data))
+          ")
+
+            if [ "$FIRST" = true ]; then
+              FIRST=false
+            else
+              echo ',' >> repo-data.json
+            fi
+            echo "$COMBINED" >> repo-data.json
+          done
+
+          echo ']}' >> repo-data.json
+
+          echo "Scan complete. $(python3 -c "import json; d=json.load(open('repo-data.json')); print(len(d['repos']))" 2>/dev/null || echo '?') repos captured."
+
+      - name: Validate JSON
+        run: |
+          python3 -c "
+          import json, sys
+          with open('repo-data.json') as f:
+              data = json.load(f)
+          repos = data.get('repos', [])
+          print(f'Valid JSON: {len(repos)} repos')
+          for r in repos:
+              print(f'  {r[\"name\"]:25s} {r[\"language\"]:12s} ★{r[\"stars\"]:3d}  {r[\"commits_7d\"]:2d} commits/7d')
+          "
+
+      - name: Generate profile README
+        run: |
+          python3 .github/scripts/generate-profile-readme.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add repo-data.json README.md
+          git diff --staged --quiet || {
+            git commit -m "metrics: daily scan $(date -u +%Y-%m-%d)"
+            git push
+          }
