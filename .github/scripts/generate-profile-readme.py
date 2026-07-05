@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate dlorp profile README from repo-data.json.
 
-Reads the metrics JSON and outputs a visual GitHub profile README.
-Design can be swapped by modifying the render functions below.
+Design by 0r4cl3 — CRT/demoscene aesthetic, amber phosphor badges,
+3-column flagship cards, compact table for other projects, signal chain diagram.
 """
 
 import json
@@ -10,35 +10,38 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # ── Config ──────────────────────────────────────────────────────────
-# Flagship projects get larger cards. Others get compact rows.
 FLAGSHIP = {"r3LAY", "synapse-engine", "myc3lium"}
-# Skip these from the dashboard
 SKIP = {"hdls-metrics", "dlorp", "hello-world"}
-# Repo order (flagship first, then alphabetical)
 ORDER = ["r3LAY", "synapse-engine", "myc3lium", "phase-engine",
          "t3rra1n", "vault-crawler", "heedless.net", "knowledge-vault",
-         "knowledge-vault-site", "second-movement", "myc3lium",
-         "openclaw-conn", "openclaw-dash", "basiliskii-vita",
-         "psx2blend", "uhh", "Bento"]
+         "knowledge-vault-site", "second-movement", "openclaw-conn",
+         "openclaw-dash", "basiliskii-vita", "psx2blend", "uhh", "Bento"]
 
-# ── Badge helpers ───────────────────────────────────────────────────
-def badge(label, value, color="ff9500"):
-    """Shields.io static badge."""
-    return f"https://img.shields.io/badge/{label}-{value}-{color}"
+# Descriptions for flagship cards (can be overridden by repo data)
+FLAGSHIP_DESC = {
+    "r3LAY": "Local AI project management with a TUI interface. Privacy-first: runs entirely on-device with Hermes agent orchestration and local LLM inference. The operational hub for the entire HDLS signal chain.",
+    "synapse-engine": "LLM workshop: load, benchmark, finetune, and abliterate local models. Modular prototype system built on FastAPI. Each stage of the model lifecycle is a separate, swappable component.",
+    "myc3lium": "FastAPI bridge between Reticulum mesh networking and Meshtastic LoRa. Runs on ESP32 for low-power field deployment. Named after the underground network of fungal mycelium.",
+}
 
-def lang_badge(lang):
-    """Language badge with color."""
-    colors = {
-        "Python": "3776AB", "TypeScript": "3178C6", "JavaScript": "F7DF1E",
-        "C": "555555", "Rust": "CE422B", "Go": "00ADD8",
-        "HTML": "E34F26", "CSS": "1572B6", "Shell": "89E051",
-        "Lua": "000080", "Java": "ED8B00", "Ruby": "CC342D",
-    }
-    c = colors.get(lang, "555555")
-    return badge(lang, "", c).rstrip("-")  # remove trailing dash for empty value
+# Agent roster
+AGENTS = [
+    ("dr3dg3", "Source hunter, crawler"),
+    ("pr0b3", "Deep-work researcher"),
+    ("g0blin", "Vault gatekeeper, triage"),
+    ("0r4cl3", "Design keeper, brand steward"),
+    ("hyph4", "Coordinator, Discord presence"),
+    ("s3ntry", "Security auditor"),
+    ("3tch", "Code implementation"),
+    ("r3nd3r", "Visual production"),
+    ("spl1c3", "Content assembly"),
+]
+
+# ── Helpers ─────────────────────────────────────────────────────────
+def url_encode(s):
+    return s.replace(" ", "%20").replace("|", "%7C")
 
 def time_ago(iso_str):
-    """Human-readable time ago from ISO timestamp."""
     if not iso_str:
         return "unknown"
     try:
@@ -62,92 +65,59 @@ def time_ago(iso_str):
     except Exception:
         return "unknown"
 
-# ── Card renderers ──────────────────────────────────────────────────
-def render_flagship(repo):
-    """Large card for flagship projects."""
+# ── Renderers ───────────────────────────────────────────────────────
+def render_flagship_card(repo):
+    """3-column HTML table cell for a flagship project."""
     name = repo["name"]
-    desc = repo.get("description", "No description")
+    desc = FLAGSHIP_DESC.get(name, repo.get("description", "No description"))
     lang = repo.get("language", "")
-    stars = repo.get("stars", 0)
-    forks = repo.get("forks", 0)
-    pushed = time_ago(repo.get("pushed_at", ""))
-    topics = repo.get("topics", [])
-    release = repo.get("latest_release", {})
-    rel_tag = release.get("tag", "")
-    commits_7d = repo.get("commits_7d", 0)
-    size_kb = repo.get("size_kb", 0)
+    stack = f"{lang}" if lang else "mixed"
+    homepage = repo.get("homepage", "")
+    repo_url = homepage if homepage else f"https://github.com/dlorp/{name}"
 
-    # Size display
-    if size_kb > 1024 * 1024:
-        size_str = f"{size_kb // (1024 * 1024)}GB"
-    elif size_kb > 1024:
-        size_str = f"{size_kb // 1024}MB"
+    # Build stack detail from top languages
+    langs = repo.get("languages_top5", [])
+    if len(langs) > 1:
+        stack_detail = " | ".join(langs[:3])
     else:
-        size_str = f"{size_kb}KB"
-
-    # Build topic pills
-    topic_str = " ".join(f"`{t}`" for t in topics[:5]) if topics else ""
+        stack_detail = stack
 
     lines = [
-        f"### 🔷 [{name}](https://github.com/dlorp/{name})",
-        f"",
-        f"> {desc}",
-        f"",
+        f'    <td width="33%" valign="top">',
+        f'      <h3 align="center"><a href="{repo_url}">{name}</a></h3>',
+        f'      <p align="center">',
+        f'        <img src="https://img.shields.io/badge/status-active-ff9500" alt="status" /><br/>',
+        f'        <img src="https://img.shields.io/badge/stack-{url_encode(stack_detail)}-CC8800" alt="stack" /><br/>',
+        f'        <img src="https://img.shields.io/github/last-commit/dlorp/{name}?color=ff9500&label=last%20commit" alt="last commit" /><br/>',
+        f'        <img src="https://img.shields.io/github/languages/top/dlorp/{name}?color=CC8800" alt="language" />',
+        f'      </p>',
+        f'      <p align="center">',
+        f'        {desc}',
+        f'      </p>',
+        f'    </td>',
     ]
-
-    # Badges row
-    badges = []
-    if lang:
-        badges.append(f"![{lang}](https://img.shields.io/badge/language-{lang.replace(' ', '%20')}-{lang_color(lang)})")
-    badges.append(f"![stars](https://img.shields.io/github/stars/dlorp/{name}?style=flat&color=ff9500)")
-    badges.append(f"![forks](https://img.shields.io/github/forks/dlorp/{name}?style=flat)")
-    if rel_tag:
-        badges.append(f"![release](https://img.shields.io/badge/release-{rel_tag}-brightgreen)")
-    badges.append(f"![size](https://img.shields.io/badge/size-{size_str}-blue)")
-
-    lines.append(" ".join(badges))
-    lines.append("")
-
-    # Stats line
-    stats = []
-    if commits_7d > 0:
-        stats.append(f"📈 **{commits_7d}** commits this week")
-    stats.append(f"🔄 Last active **{pushed}**")
-    if stars > 0:
-        stats.append(f"⭐ **{stars}** stars")
-    lines.append(" · ".join(stats))
-
-    if topic_str:
-        lines.append("")
-        lines.append(topic_str)
-
-    lines.append("")
-    lines.append("---")
-    lines.append("")
     return "\n".join(lines)
 
 
-def lang_color(lang):
-    colors = {
-        "Python": "3776AB", "TypeScript": "3178C6", "JavaScript": "F7DF1E",
-        "C": "555555", "Rust": "CE422B", "Go": "00ADD8",
-    }
-    return colors.get(lang, "555555")
-
-
-def render_compact(repo):
-    """Compact row for non-flagship projects."""
+def render_compact_row(repo):
+    """Table row for non-flagship projects."""
     name = repo["name"]
-    desc = repo.get("description", "No description")[:60]
+    desc = repo.get("description", "No description")
     lang = repo.get("language", "")
-    stars = repo.get("stars", 0)
-    pushed = time_ago(repo.get("pushed_at", ""))
+    stack = f"{lang}" if lang else "mixed"
+    homepage = repo.get("homepage", "")
+    repo_url = homepage if homepage else f"https://github.com/dlorp/{name}"
     commits_7d = repo.get("commits_7d", 0)
 
-    activity = f"📈 {commits_7d}/wk" if commits_7d > 0 else "—"
-    star_str = f"⭐{stars}" if stars > 0 else "—"
+    # Status badge
+    if commits_7d > 0:
+        status = "active-ff9500"
+    elif repo.get("archived"):
+        status = "archived-555555"
+    else:
+        status = "dormant-7A5200"
 
-    return f"| [{name}](https://github.com/dlorp/{name}) | {desc} | {lang} | {star_str} | {activity} | {pushed} |"
+    return f'| [{name}]({repo_url}) | {desc[:80]} | {stack} | ![status](https://img.shields.io/badge/{status}) |'
 
 
 # ── Main ────────────────────────────────────────────────────────────
@@ -163,7 +133,7 @@ def main():
     repos = {r["name"]: r for r in data.get("repos", [])}
     generated = data.get("generated_at", "unknown")
 
-    # Sort: flagship first, then by ORDER list, then alphabetical
+    # Sort
     def sort_key(name):
         if name in FLAGSHIP:
             return (0, 0, name)
@@ -174,68 +144,131 @@ def main():
             return (2, 0, name)
 
     sorted_names = sorted(repos.keys(), key=sort_key)
-    # Filter out skipped repos
     sorted_names = [n for n in sorted_names if n not in SKIP]
+
+    flagship_repos = [repos[n] for n in sorted_names if n in FLAGSHIP]
+    other_repos = [repos[n] for n in sorted_names if n not in FLAGSHIP]
 
     # ── Build README ──
     lines = []
 
-    # Header
-    lines.append('<div align="center">')
-    lines.append("")
-    lines.append("# HDLS — Heedless")
-    lines.append("")
-    lines.append("**Knowledge-as-topology.** Self-hosted AI pipelines, local-first tools,")
-    lines.append("and the research infrastructure that connects them.")
-    lines.append("")
-    lines.append(f"![repos](https://img.shields.io/badge/{len(sorted_names)}_projects-ff9500?style=for-the-badge)")
-    lines.append("")
-    lines.append("</div>")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
+    # Banner
+    lines.append('<p align="center">')
+    lines.append('  <img src="./hdls-banner.svg" width="640" alt="HDLS — signal chain research collective" />')
+    lines.append('</p>')
+    lines.append('')
+    lines.append('---')
+    lines.append('')
 
-    # Flagship section
-    flagship_repos = [repos[n] for n in sorted_names if n in FLAGSHIP]
-    other_repos = [repos[n] for n in sorted_names if n not in FLAGSHIP]
+    # Intro
+    lines.append('> HDLS is a personal research collective studying local AI, mesh networking,')
+    lines.append('> knowledge systems, and embedded firmware. Everything runs on hardware I own.')
+    lines.append('> No cloud dependencies, no API keys, no telemetry. The work is organized')
+    lines.append('> through a signal chain of agents that hunt, read, ingest, and design.')
+    lines.append('')
+    lines.append('---')
+    lines.append('')
 
+    # Flagship cards
     if flagship_repos:
-        lines.append("## 🔷 Flagship Projects")
-        lines.append("")
+        lines.append('## Flagship Projects')
+        lines.append('')
+        lines.append('<table>')
+        lines.append('  <tr>')
         for repo in flagship_repos:
-            lines.append(render_flagship(repo))
+            lines.append(render_flagship_card(repo))
+        lines.append('  </tr>')
+        lines.append('</table>')
+        lines.append('')
+        lines.append('---')
+        lines.append('')
 
-    # Compact table for the rest
+    # Compact table
     if other_repos:
-        lines.append("## 📦 More Projects")
-        lines.append("")
-        lines.append("| Project | Description | Lang | Stars | Activity | Last Active |")
-        lines.append("|---------|-------------|------|-------|----------|-------------|")
+        lines.append('## Other Projects')
+        lines.append('')
+        lines.append('| Project | Description | Stack | Status |')
+        lines.append('|---------|-------------|-------|--------|')
         for repo in other_repos:
-            lines.append(render_compact(repo))
-        lines.append("")
+            lines.append(render_compact_row(repo))
+        lines.append('')
+        lines.append('---')
+        lines.append('')
+
+    # Signal chain
+    lines.append('## Signal Chain')
+    lines.append('')
+    lines.append('The HDLS pipeline runs as a signal chain of specialized agents. Each stage')
+    lines.append('shapes the signal before passing it to the next:')
+    lines.append('')
+    lines.append('```')
+    lines.append('  dr3dg3        pr0b3        g0blin')
+    lines.append('    |             |             |')
+    lines.append('    v             v             v')
+    lines.append('  hunt  ------>  read  ------>  ingest  ------>  vault')
+    lines.append('    |             |             |                |')
+    lines.append('    |             |             |                |')
+    lines.append('    +-------------+-------------+----------------+')
+    lines.append('                          |')
+    lines.append('                          v')
+    lines.append('                       0r4cl3')
+    lines.append('                    (design keeper)')
+    lines.append('```')
+    lines.append('')
+    lines.append('| Agent | Role |')
+    lines.append('|-------|------|')
+    for agent, role in AGENTS:
+        lines.append(f'| {agent} | {role} |')
+    lines.append('')
+    lines.append('---')
+    lines.append('')
+
+    # Metrics footer
+    lines.append('## Metrics')
+    lines.append('')
+    lines.append('<p>')
+
+    # Creation dates for flagship
+    for repo in flagship_repos:
+        name = repo["name"]
+        lines.append(f'  <img src="https://img.shields.io/github/created-at/dlorp/{name}?color=ff9500&label=" alt="" />')
+    lines.append('</p>')
+    lines.append('')
+    lines.append('<p>')
+
+    # Summary badges
+    total_repos = len(sorted_names)
+    lines.append(f'  <img src="https://img.shields.io/badge/repos-{total_repos}-ff9500" alt="repos" />')
+
+    # Collect all languages
+    all_langs = set()
+    for repo in repos.values():
+        if repo.get("language"):
+            all_langs.add(repo["language"])
+    lang_str = url_encode(" | ".join(sorted(all_langs)[:4]))
+    lines.append(f'  <img src="https://img.shields.io/badge/languages-{lang_str}-CC8800" alt="languages" />')
+
+    lines.append(f'  <img src="https://img.shields.io/badge/vault%20entries-3100%2B-7A5200" alt="vault entries" />')
+    lines.append(f'  <img src="https://img.shields.io/badge/domains-62-7A5200" alt="domains" />')
+    lines.append('</p>')
+    lines.append('')
+    lines.append('---')
+    lines.append('')
 
     # Footer
-    if not other_repos:
-        lines.pop()  # remove last --- if no compact section followed
-    lines.append("---")
-    lines.append("")
-    lines.append('<div align="center">')
-    lines.append("")
-    lines.append(f"*Last updated: {generated[:10]} by [hdls-metrics](https://github.com/dlorp/hdls-metrics)*")
-    lines.append("")
-    lines.append("[hdls.net](https://hdls.net) · [knowledge vault](https://github.com/dlorp/knowledge-vault)")
-    lines.append("")
-    lines.append("</div>")
+    lines.append('<p align="center">')
+    lines.append(f'  <img src="https://img.shields.io/badge/HDLS-signal%20chain%20research%20collective-ff9500" alt="HDLS" />')
+    lines.append('</p>')
 
     # Write
-    out_path = Path(__file__).parents[2] / "README.md"
+    out_path = Path(__file__).parents[2] / "PROFILE-README.md"
     with open(out_path, "w") as f:
         f.write("\n".join(lines) + "\n")
 
     print(f"Profile README written to {out_path}")
     print(f"Flagship: {[r['name'] for r in flagship_repos]}")
     print(f"Compact: {[r['name'] for r in other_repos]}")
+    print(f"Total: {len(sorted_names)} repos")
 
 
 if __name__ == "__main__":
