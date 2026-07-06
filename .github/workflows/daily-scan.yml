@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  repository-projects: read
 
 jobs:
   scan-repos:
@@ -70,17 +69,20 @@ jobs:
               WEEK_COMMITS=$(gh api "repos/dlorp/$REPO/commits?since=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)&per_page=100" --jq 'length')
             fi
 
-            # Combine into JSON object
-            COMBINED=$(echo "$DATA" | python3 -c "
-          import sys, json
+            # Combine into JSON object. Values are passed via ENV (not shell
+            # string interpolation) so a repo's release/language name can't
+            # inject Python. NOTE: the -c body must stay dedented to the YAML
+            # block indent (the first run-line's column) or python -c raises
+            # IndentationError.
+            COMBINED=$(echo "$DATA" | RELEASE="$RELEASE" LANGS="$LANGS" WEEK_COMMITS="$WEEK_COMMITS" python3 -c '
+          import os, sys, json
           data = json.load(sys.stdin)
-          release = json.loads('''$RELEASE''')
-          langs = json.loads('''$LANGS''')
-          data['latest_release'] = release
-          data['languages_top5'] = langs
-          data['commits_7d'] = int('''$WEEK_COMMITS''')
+          data["latest_release"] = json.loads(os.environ["RELEASE"])
+          data["languages_top5"] = json.loads(os.environ["LANGS"])
+          wk = (os.environ.get("WEEK_COMMITS") or "0").strip()
+          data["commits_7d"] = int(wk) if wk.isdigit() else 0
           print(json.dumps(data))
-          ")
+          ')
 
             if [ "$FIRST" = true ]; then
               FIRST=false
@@ -114,7 +116,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add repo-data.json README.md
+          git add repo-data.json PROFILE-README.md
           git diff --staged --quiet || {
             git commit -m "metrics: daily scan $(date -u +%Y-%m-%d)"
             git push
@@ -133,10 +135,10 @@ jobs:
 
           # Copy generated files
           cp "${{ github.workspace }}/PROFILE-README.md" README.md
-          cp "${{ github.workspace }}/hdls-banner.svg" hdls-banner.svg
+          cp "${{ github.workspace }}/hdls-banner.png" hdls-banner.png
 
           # Commit and push if changed
-          git add README.md hdls-banner.svg
+          git add README.md hdls-banner.png
           git diff --staged --quiet || {
             git commit -m "profile: daily update $(date -u +%Y-%m-%d)"
             git push

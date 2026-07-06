@@ -1,274 +1,237 @@
 #!/usr/bin/env python3
-"""Generate dlorp profile README from repo-data.json.
+"""Generate the dlorp profile README (dlorp/dlorp).
 
-Design by 0r4cl3 — CRT/demoscene aesthetic, amber phosphor badges,
-3-column flagship cards, compact table for other projects, signal chain diagram.
+The profile README is CURATED here, not scraped live. dlorp's repos are
+private, so shields.io — which renders badges from GitHub's *public* API with
+no auth — cannot produce dynamic per-repo badges (they would render "invalid").
+So every badge below is STATIC, and the banner is a PNG produced by the render
+agents (SVG does not render reliably in GitHub profile READMEs — see the
+banner history in git). This script owns the README's structure and prose;
+the agents own the banner image and the badge values.
+
+To update the profile: edit the CONFIG blocks below (or the banner PNG) and let
+the daily-scan workflow redeploy. The repo scan (repo-data.json) is a separate
+concern consumed by the vault's repo-cards cron — it does not drive this file.
+
+repo-data.json is read only to refresh the "repos" count badge when a real
+scan is present; it never injects unvalidated content and always has a static
+fallback, so a missing/partial scan can never corrupt the profile.
 """
 
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 
-# ── Config ──────────────────────────────────────────────────────────
-FLAGSHIP = {"r3LAY", "synapse-engine", "myc3lium"}
-SKIP = {"hdls-metrics", "dlorp", "hello-world"}
-ORDER = ["r3LAY", "synapse-engine", "myc3lium", "phase-engine",
-         "t3rra1n", "vault-crawler", "heedless.net", "knowledge-vault",
-         "knowledge-vault-site", "second-movement", "openclaw-conn",
-         "openclaw-dash", "basiliskii-vita", "psx2blend", "uhh", "Bento"]
+# ── Banner (agent-produced PNG; never SVG) ──────────────────────────
+BANNER = "./hdls-banner.png"
 
-# Descriptions for flagship cards (can be overridden by repo data)
-FLAGSHIP_DESC = {
-    "r3LAY": "Local AI project management with a TUI interface. Privacy-first: runs entirely on-device with Hermes agent orchestration and local LLM inference. The operational hub for the entire HDLS signal chain.",
-    "synapse-engine": "LLM workshop: load, benchmark, finetune, and abliterate local models. Modular prototype system built on FastAPI. Each stage of the model lifecycle is a separate, swappable component.",
-    "myc3lium": "FastAPI bridge between Reticulum mesh networking and Meshtastic LoRa. Runs on ESP32 for low-power field deployment. Named after the underground network of fungal mycelium.",
-}
-
-# Agent roster
-AGENTS = [
-    ("dr3dg3", "Source hunter, crawler"),
-    ("pr0b3", "Deep-work researcher"),
-    ("g0blin", "Vault gatekeeper, triage"),
-    ("0r4cl3", "Design keeper, brand steward"),
-    ("hyph4", "Coordinator, Discord presence"),
-    ("s3ntry", "Security auditor"),
-    ("3tch", "Code implementation"),
-    ("r3nd3r", "Visual production"),
-    ("spl1c3", "Content assembly"),
+# ── Intro ───────────────────────────────────────────────────────────
+INTRO = [
+    "A signal chain research collective. We preserve vanishing knowledge with",
+    "dr3dg3-n3t, build local AI tools with synapse-engine and myc3lium, and keep",
+    "smaller models viable in the field. Everything runs on hardware we own.",
 ]
 
-# ── Helpers ─────────────────────────────────────────────────────────
-def url_encode(s):
-    return s.replace(" ", "%20").replace("|", "%7C")
+# ── Flagship cards (curated; static badges) ─────────────────────────
+# badges: list of (label, message, color, alt). label="" -> message-only badge.
+FLAGSHIP = [
+    {
+        "name": "synapse-engine",
+        "url": "https://github.com/dlorp/synapse-engine",
+        "badges": [
+            ("status", "active", "ff9500", "status"),
+            ("stack", "Python | C++ | CUDA", "CC8800", "stack"),
+            ("last commit", "recent", "ff9500", "last commit"),
+            ("language", "C++", "CC8800", "language"),
+        ],
+        "desc": ("LLM workshop: load, benchmark, finetune, and abliterate local models. "
+                 "Modular prototype system where each stage of the model lifecycle is a "
+                 "separate, swappable component. Built to make smaller models viable in "
+                 "the field."),
+    },
+    {
+        "name": "myc3lium",
+        "url": "https://github.com/dlorp/myc3lium",
+        "badges": [
+            ("status", "active", "ff9500", "status"),
+            ("stack", "Python | C", "CC8800", "stack"),
+            ("last commit", "recent", "ff9500", "last commit"),
+            ("language", "C", "CC8800", "language"),
+        ],
+        "desc": ("FastAPI bridge between Reticulum mesh networking and Meshtastic LoRa. "
+                 "Runs on ESP32 for low-power field deployment. Named after the "
+                 "underground network of fungal mycelium."),
+    },
+    {
+        "name": "dr3dg3-n3t",
+        "url": "https://github.com/dlorp/dr3dg3-n3t",
+        "badges": [
+            ("status", "active", "ff9500", "status"),
+            ("stack", "HTML | JSON | preservation", "CC8800", "stack"),
+            ("last commit", "recent", "ff9500", "last commit"),
+            ("type", "whole earth catalog", "CC8800", "type"),
+        ],
+        "desc": ('Offline internet — a "Web 3.0 Whole Earth Catalog" for preserving '
+                 "knowledge that matters. Curated snapshots of vanishing sources, "
+                 "structured for browsing without a connection."),
+    },
+]
 
-def time_ago(iso_str):
-    if not iso_str:
-        return "unknown"
+# ── Other projects (curated; static status) ─────────────────────────
+# stack: list of tokens joined with " | " (escaped for the markdown table).
+OTHER = [
+    {"name": "r3LAY", "url": "https://github.com/dlorp/r3LAY",
+     "desc": "Local-first research terminal for hobbyists — maintenance logging, "
+             "natural language input, RAG search across your docs",
+     "stack": ["Python", "Shell"], "status": ("active", "ff9500")},
+    {"name": "phase-engine", "url": "https://github.com/dlorp/phase-engine",
+     "desc": "Circadian awareness tool for Sensor Watch — four natural phases, "
+             "intelligent feedback. Bangle.js 2 for testing, f91W custom firmware "
+             "is the target",
+     "stack": ["C", "C++", "Python"], "status": ("active", "ff9500")},
+    {"name": "t3rra1n", "url": "https://github.com/dlorp/t3rra1n",
+     "desc": "Terminal UI that doubles as an immersive ARG — field reports from a "
+             "stranded HDLS researcher documenting alien landscapes",
+     "stack": ["Python"], "status": ("active", "ff9500")},
+    {"name": "heedless.net", "url": "https://github.com/dlorp/heedless.net",
+     "desc": "HDLS domain — public-facing site",
+     "stack": ["HTML"], "status": ("active", "ff9500")},
+    {"name": "knowledge-vault", "url": "https://github.com/dlorp/knowledge-vault",
+     "desc": "3000+ entries across 62 domains — the collective memory",
+     "stack": ["Markdown"], "status": ("active", "ff9500")},
+    {"name": "vault-crawler", "url": "https://github.com/dlorp/vault-crawler",
+     "desc": "Automated source intake for the knowledge vault",
+     "stack": ["Python"], "status": ("active", "ff9500")},
+]
+
+# ── Metrics footer (agent-maintained static values) ─────────────────
+REPOS_FALLBACK = "18"          # used when no real scan is present
+LANGUAGES = "Python | C++ | C | JavaScript"
+VAULT_ENTRIES = "3000+"
+DOMAINS = "62"
+
+# ── "What We Do" diagram (static) ───────────────────────────────────
+WHAT_WE_DO = """preserve                 build                   research
+   |                       |                       |
+dr3dg3-n3t            synapse-engine          small LLMs
+offline internet      model workshop          in the field
+   |                       |                       |
+   +-----------+-----------+-----------+-----------+
+               |
+            HDLS lab
+     hardware we own
+     no cloud, no keys"""
+
+SKIP = {"hdls-metrics", "dlorp", "hello-world"}
+
+
+# ── Helpers ─────────────────────────────────────────────────────────
+def _seg(s):
+    """URL-encode one shields.io path segment (label or message)."""
+    return (s.replace("-", "--").replace("_", "__")
+             .replace(" ", "%20").replace("|", "%7C").replace("+", "%2B"))
+
+
+def badge_url(label, message, color):
+    if label:
+        return f"https://img.shields.io/badge/{_seg(label)}-{_seg(message)}-{color}"
+    return f"https://img.shields.io/badge/{_seg(message)}-{color}"
+
+
+def img(label, message, color, alt):
+    return f'<img src="{badge_url(label, message, color)}" alt="{alt}" />'
+
+
+def repo_count(default):
+    """Live repo count from a real scan, else the static fallback.
+
+    A real scan of dlorp/* returns many repos; the committed seed has only a
+    few. Require a plausible count (>=5) before trusting it, so seed/partial
+    data never shrinks the badge.
+    """
+    path = Path(__file__).parents[2] / "repo-data.json"
     try:
-        dt = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
-        now = datetime.now(timezone.utc)
-        delta = now - dt
-        days = delta.days
-        if days == 0:
-            hours = delta.seconds // 3600
-            return f"{hours}h ago" if hours > 0 else "today"
-        elif days == 1:
-            return "yesterday"
-        elif days < 7:
-            return f"{days}d ago"
-        elif days < 30:
-            return f"{days // 7}w ago"
-        elif days < 365:
-            return f"{days // 30}mo ago"
-        else:
-            return f"{days // 365}y ago"
-    except Exception:
-        return "unknown"
+        with open(path) as f:
+            repos = json.load(f).get("repos", [])
+        shown = [r for r in repos if r.get("name") not in SKIP]
+        if len(shown) >= 5:
+            return str(len(shown))
+    except (OSError, ValueError, AttributeError):
+        pass
+    return default
+
 
 # ── Renderers ───────────────────────────────────────────────────────
-def render_flagship_card(repo):
-    """3-column HTML table cell for a flagship project."""
-    name = repo["name"]
-    desc = FLAGSHIP_DESC.get(name, repo.get("description", "No description"))
-    lang = repo.get("language", "")
-    stack = f"{lang}" if lang else "mixed"
-    homepage = repo.get("homepage", "")
-    repo_url = homepage if homepage else f"https://github.com/dlorp/{name}"
-
-    # Build stack detail from top languages
-    langs = repo.get("languages_top5", [])
-    if len(langs) > 1:
-        stack_detail = " | ".join(langs[:3])
-    else:
-        stack_detail = stack
-
-    lines = [
-        f'    <td width="33%" valign="top">',
-        f'      <h3 align="center"><a href="{repo_url}">{name}</a></h3>',
-        f'      <p align="center">',
-        f'        <img src="https://img.shields.io/badge/status-active-ff9500" alt="status" /><br/>',
-        f'        <img src="https://img.shields.io/badge/stack-{url_encode(stack_detail)}-CC8800" alt="stack" /><br/>',
-        f'        <img src="https://img.shields.io/github/last-commit/dlorp/{name}?color=ff9500&label=last%20commit" alt="last commit" /><br/>',
-        f'        <img src="https://img.shields.io/github/languages/top/dlorp/{name}?color=CC8800" alt="language" />',
-        f'      </p>',
-        f'      <p align="center">',
-        f'        {desc}',
-        f'      </p>',
-        f'    </td>',
-    ]
-    return "\n".join(lines)
+def render_flagship(repo):
+    badges = [f"        {img(*b)}<br/>" for b in repo["badges"][:-1]]
+    badges.append(f"        {img(*repo['badges'][-1])}")
+    return "\n".join([
+        '    <td width="33%" valign="top">',
+        f'      <h3 align="center"><a href="{repo["url"]}">{repo["name"]}</a></h3>',
+        '      <p align="center">',
+        *badges,
+        '      </p>',
+        '      <p align="center">',
+        f'        {repo["desc"]}',
+        '      </p>',
+        '    </td>',
+    ])
 
 
-def render_compact_row(repo):
-    """Table row for non-flagship projects."""
-    name = repo["name"]
-    desc = repo.get("description", "No description")
-    lang = repo.get("language", "")
-    stack = f"{lang}" if lang else "mixed"
-    homepage = repo.get("homepage", "")
-    repo_url = homepage if homepage else f"https://github.com/dlorp/{name}"
-    commits_7d = repo.get("commits_7d", 0)
-
-    # Status badge
-    if commits_7d > 0:
-        status = "active-ff9500"
-    elif repo.get("archived"):
-        status = "archived-555555"
-    else:
-        status = "dormant-7A5200"
-
-    return f'| [{name}]({repo_url}) | {desc[:80]} | {stack} | ![status](https://img.shields.io/badge/{status}) |'
+def render_row(repo):
+    stack = " \\| ".join(repo["stack"])
+    status = f"https://img.shields.io/badge/{_seg(repo['status'][0])}-{repo['status'][1]}"
+    return f'| [{repo["name"]}]({repo["url"]}) | {repo["desc"]} | {stack} | ![]({status}) |'
 
 
 # ── Main ────────────────────────────────────────────────────────────
 def main():
-    data_path = Path(__file__).parents[2] / "repo-data.json"
-    if not data_path.exists():
-        print(f"ERROR: {data_path} not found")
-        return
-
-    with open(data_path) as f:
-        data = json.load(f)
-
-    repos = {r["name"]: r for r in data.get("repos", [])}
-    generated = data.get("generated_at", "unknown")
-
-    # Sort
-    def sort_key(name):
-        if name in FLAGSHIP:
-            return (0, 0, name)
-        try:
-            idx = ORDER.index(name)
-            return (1, idx, name)
-        except ValueError:
-            return (2, 0, name)
-
-    sorted_names = sorted(repos.keys(), key=sort_key)
-    sorted_names = [n for n in sorted_names if n not in SKIP]
-
-    flagship_repos = [repos[n] for n in sorted_names if n in FLAGSHIP]
-    other_repos = [repos[n] for n in sorted_names if n not in FLAGSHIP]
-
-    # ── Build README ──
-    lines = []
+    L = []
 
     # Banner
-    lines.append('<p align="center">')
-    lines.append('  <img src="./hdls-banner.svg" width="640" alt="HDLS — signal chain research collective" />')
-    lines.append('</p>')
-    lines.append('')
-    lines.append('---')
-    lines.append('')
+    L += ['<p align="center">',
+          f'  <img src="{BANNER}" width="640" alt="HDLS" />',
+          '</p>', '', '---', '']
 
     # Intro
-    lines.append('> HDLS is a personal research collective studying local AI, mesh networking,')
-    lines.append('> knowledge systems, and embedded firmware. Everything runs on hardware I own.')
-    lines.append('> No cloud dependencies, no API keys, no telemetry. The work is organized')
-    lines.append('> through a signal chain of agents that hunt, read, ingest, and design.')
-    lines.append('')
-    lines.append('---')
-    lines.append('')
+    L += [f"> {line}" for line in INTRO]
+    L += ['', '---', '']
 
-    # Flagship cards
-    if flagship_repos:
-        lines.append('## Flagship Projects')
-        lines.append('')
-        lines.append('<table>')
-        lines.append('  <tr>')
-        for repo in flagship_repos:
-            lines.append(render_flagship_card(repo))
-        lines.append('  </tr>')
-        lines.append('</table>')
-        lines.append('')
-        lines.append('---')
-        lines.append('')
+    # Flagship
+    L += ['## Flagship Projects', '', '<table>', '  <tr>']
+    for repo in FLAGSHIP:
+        L.append(render_flagship(repo))
+    L += ['  </tr>', '</table>', '', '---', '']
 
-    # Compact table
-    if other_repos:
-        lines.append('## Other Projects')
-        lines.append('')
-        lines.append('| Project | Description | Stack | Status |')
-        lines.append('|---------|-------------|-------|--------|')
-        for repo in other_repos:
-            lines.append(render_compact_row(repo))
-        lines.append('')
-        lines.append('---')
-        lines.append('')
+    # Other projects
+    L += ['## Other Projects', '',
+          '| Project | Description | Stack | Status |',
+          '|---------|-------------|-------|--------|']
+    for repo in OTHER:
+        L.append(render_row(repo))
+    L += ['', '---', '']
 
-    # Signal chain
-    lines.append('## Signal Chain')
-    lines.append('')
-    lines.append('The HDLS pipeline runs as a signal chain of specialized agents. Each stage')
-    lines.append('shapes the signal before passing it to the next:')
-    lines.append('')
-    lines.append('```')
-    lines.append('  dr3dg3        pr0b3        g0blin')
-    lines.append('    |             |             |')
-    lines.append('    v             v             v')
-    lines.append('  hunt  ------>  read  ------>  ingest  ------>  vault')
-    lines.append('    |             |             |                |')
-    lines.append('    |             |             |                |')
-    lines.append('    +-------------+-------------+----------------+')
-    lines.append('                          |')
-    lines.append('                          v')
-    lines.append('                       0r4cl3')
-    lines.append('                    (design keeper)')
-    lines.append('```')
-    lines.append('')
-    lines.append('| Agent | Role |')
-    lines.append('|-------|------|')
-    for agent, role in AGENTS:
-        lines.append(f'| {agent} | {role} |')
-    lines.append('')
-    lines.append('---')
-    lines.append('')
+    # What We Do
+    L += ['## What We Do', '', '```', WHAT_WE_DO, '```', '', '---', '']
 
-    # Metrics footer
-    lines.append('## Metrics')
-    lines.append('')
-    lines.append('<p>')
-
-    # Creation dates for flagship
-    for repo in flagship_repos:
-        name = repo["name"]
-        lines.append(f'  <img src="https://img.shields.io/github/created-at/dlorp/{name}?color=ff9500&label=" alt="" />')
-    lines.append('</p>')
-    lines.append('')
-    lines.append('<p>')
-
-    # Summary badges
-    total_repos = len(sorted_names)
-    lines.append(f'  <img src="https://img.shields.io/badge/repos-{total_repos}-ff9500" alt="repos" />')
-
-    # Collect all languages
-    all_langs = set()
-    for repo in repos.values():
-        if repo.get("language"):
-            all_langs.add(repo["language"])
-    lang_str = url_encode(" | ".join(sorted(all_langs)[:4]))
-    lines.append(f'  <img src="https://img.shields.io/badge/languages-{lang_str}-CC8800" alt="languages" />')
-
-    lines.append(f'  <img src="https://img.shields.io/badge/vault%20entries-3100%2B-7A5200" alt="vault entries" />')
-    lines.append(f'  <img src="https://img.shields.io/badge/domains-62-7A5200" alt="domains" />')
-    lines.append('</p>')
-    lines.append('')
-    lines.append('---')
-    lines.append('')
+    # Metrics
+    L += ['## Metrics', '', '<p>',
+          f'  {img("repos", repo_count(REPOS_FALLBACK), "ff9500", "repos")}',
+          f'  {img("languages", LANGUAGES, "CC8800", "languages")}',
+          f'  {img("vault entries", VAULT_ENTRIES, "7A5200", "vault entries")}',
+          f'  {img("domains", DOMAINS, "7A5200", "domains")}',
+          '</p>', '', '---', '']
 
     # Footer
-    lines.append('<p align="center">')
-    lines.append(f'  <img src="https://img.shields.io/badge/HDLS-signal%20chain%20research%20collective-ff9500" alt="HDLS" />')
-    lines.append('</p>')
+    L += ['<p align="center">',
+          f'  {img("HDLS", "research collective", "ff9500", "HDLS")}',
+          '</p>']
 
-    # Write
     out_path = Path(__file__).parents[2] / "PROFILE-README.md"
     with open(out_path, "w") as f:
-        f.write("\n".join(lines) + "\n")
-
+        f.write("\n".join(L) + "\n")
     print(f"Profile README written to {out_path}")
-    print(f"Flagship: {[r['name'] for r in flagship_repos]}")
-    print(f"Compact: {[r['name'] for r in other_repos]}")
-    print(f"Total: {len(sorted_names)} repos")
+    print(f"Flagship: {[r['name'] for r in FLAGSHIP]}")
+    print(f"Other:    {[r['name'] for r in OTHER]}")
 
 
 if __name__ == "__main__":
