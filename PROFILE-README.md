@@ -59,13 +59,12 @@
 
 | Project | Description | Stack | Status |
 |---------|-------------|-------|--------|
-| [r3LAY](https://github.com/dlorp/r3LAY) | Standalone TUI research assistant with local LLM integration | Python \| Textual | ![](https://img.shields.io/badge/active-ff9500) |
-| [phase-engine](https://github.com/dlorp/phase-engine) | Embedded firmware for Bangle.js 2 — 3-bit LCD, sensors | C \| Espruino | ![](https://img.shields.io/badge/active-ff9500) |
-| [t3rra1n](https://github.com/dlorp/t3rra1n) | Procedural terrain generation research | Python | ![](https://img.shields.io/badge/active-ff9500) |
+| [r3LAY](https://github.com/dlorp/r3LAY) | Local-first research terminal for hobbyists — maintenance logging, natural language input, RAG search across your docs | Python \| Shell | ![](https://img.shields.io/badge/active-ff9500) |
+| [phase-engine](https://github.com/dlorp/phase-engine) | Circadian awareness tool for Sensor Watch — four natural phases, intelligent feedback. Bangle.js 2 for testing, f91W custom firmware is the target | C \| C++ \| Python | ![](https://img.shields.io/badge/active-ff9500) |
+| [t3rra1n](https://github.com/dlorp/t3rra1n) | Terminal UI that doubles as an immersive ARG — field reports from a stranded HDLS researcher documenting alien landscapes | Python | ![](https://img.shields.io/badge/active-ff9500) |
 | [heedless.net](https://github.com/dlorp/heedless.net) | HDLS domain — public-facing site | HTML | ![](https://img.shields.io/badge/active-ff9500) |
 | [knowledge-vault](https://github.com/dlorp/knowledge-vault) | 3100+ entries across 62 domains — the collective memory | Markdown | ![](https://img.shields.io/badge/active-ff9500) |
 | [vault-crawler](https://github.com/dlorp/vault-crawler) | Automated source intake for the knowledge vault | Python | ![](https://img.shields.io/badge/active-ff9500) |
-| [second-movement](https://github.com/dlorp/second-movement) | Musical composition and experimentation | Various | ![](https://img.shields.io/badge/active-ff9500) |
 
 ---
 
@@ -89,7 +88,7 @@ offline internet      model workshop          in the field
 ## Metrics
 
 <p>
-  <img src="https://img.shields.io/badge/repos-17-ff9500" alt="repos" />
+  <img src="https://img.shields.io/badge/repos-18-ff9500" alt="repos" />
   <img src="https://img.shields.io/badge/languages-Python%20%7C%20C%2B%2B%20%7C%20C%20%7C%20JavaScript-CC8800" alt="languages" />
   <img src="https://img.shields.io/badge/vault%20entries-3100%2B-7A5200" alt="vault entries" />
   <img src="https://img.shields.io/badge/domains-62-7A5200" alt="domains" />

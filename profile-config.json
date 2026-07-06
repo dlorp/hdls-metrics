@@ -43,13 +43,13 @@
   ],
   "other_projects": [
     {"name": "r3LAY", "url": "https://github.com/dlorp/r3LAY",
-     "desc": "Standalone TUI research assistant with local LLM integration",
-     "stack": ["Python", "Textual"], "status": ["active", "ff9500"]},
+     "desc": "Local-first research terminal for hobbyists — maintenance logging, natural language input, RAG search across your docs",
+     "stack": ["Python", "Shell"], "status": ["active", "ff9500"]},
     {"name": "phase-engine", "url": "https://github.com/dlorp/phase-engine",
-     "desc": "Embedded firmware for Bangle.js 2 — 3-bit LCD, sensors",
-     "stack": ["C", "Espruino"], "status": ["active", "ff9500"]},
+     "desc": "Circadian awareness tool for Sensor Watch — four natural phases, intelligent feedback. Bangle.js 2 for testing, f91W custom firmware is the target",
+     "stack": ["C", "C++", "Python"], "status": ["active", "ff9500"]},
     {"name": "t3rra1n", "url": "https://github.com/dlorp/t3rra1n",
-     "desc": "Procedural terrain generation research",
+     "desc": "Terminal UI that doubles as an immersive ARG — field reports from a stranded HDLS researcher documenting alien landscapes",
      "stack": ["Python"], "status": ["active", "ff9500"]},
     {"name": "heedless.net", "url": "https://github.com/dlorp/heedless.net",
      "desc": "HDLS domain — public-facing site",
@@ -59,14 +59,11 @@
      "stack": ["Markdown"], "status": ["active", "ff9500"]},
     {"name": "vault-crawler", "url": "https://github.com/dlorp/vault-crawler",
      "desc": "Automated source intake for the knowledge vault",
-     "stack": ["Python"], "status": ["active", "ff9500"]},
-    {"name": "second-movement", "url": "https://github.com/dlorp/second-movement",
-     "desc": "Musical composition and experimentation",
-     "stack": ["Various"], "status": ["active", "ff9500"]}
+     "stack": ["Python"], "status": ["active", "ff9500"]}
   ],
   "what_we_do": "preserve                 build                   research\n   |                       |                       |\ndr3dg3-n3t            synapse-engine          small LLMs\noffline internet      model workshop          in the field\n   |                       |                       |\n   +-----------+-----------+-----------+-----------+\n               |\n            HDLS lab\n     hardware we own\n     no cloud, no keys",
   "metrics": [
-    ["repos", "17", "ff9500", "repos"],
+    ["repos", "18", "ff9500", "repos"],
     ["languages", "Python | C++ | C | JavaScript", "CC8800", "languages"],
     ["vault entries", "3100+", "7A5200", "vault entries"],
     ["domains", "62", "7A5200", "domains"]
