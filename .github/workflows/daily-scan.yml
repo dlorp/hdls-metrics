@@ -133,12 +133,14 @@ jobs:
           git clone "https://x-access-token:${GH_TOKEN}@github.com/dlorp/dlorp.git" /tmp/dlorp-profile
           cd /tmp/dlorp-profile
 
-          # Copy generated files
+          # Deploy the generated README ONLY. The banner image
+          # (hdls-banner.png) is manually / agent-owned in dlorp/dlorp and is
+          # intentionally NOT copied here, so the automation can never
+          # overwrite the pinned banner.
           cp "${{ github.workspace }}/PROFILE-README.md" README.md
-          cp "${{ github.workspace }}/hdls-banner.png" hdls-banner.png
 
-          # Commit and push if changed
-          git add README.md hdls-banner.png
+          # Commit and push if changed (banner is never staged)
+          git add README.md
           git diff --staged --quiet || {
             git commit -m "profile: daily update $(date -u +%Y-%m-%d)"
             git push
