@@ -1,77 +1,15 @@
-{
-  "repos": [
-    {
-      "name": "r3LAY",
-      "description": "Local AI project management — privacy-first, any goal, Hermes agent + local model",
-      "homepage": "",
-      "language": "Python",
-      "language_url": "https://github.com/dlorp/r3LAY",
-      "stars": 3,
-      "forks": 1,
-      "watchers": 2,
-      "open_issues": 2,
-      "size_kb": 45200,
-      "created_at": "2025-09-15T00:00:00Z",
-      "updated_at": "2026-07-04T14:30:00Z",
-      "pushed_at": "2026-07-04T14:30:00Z",
-      "archived": false,
-      "disabled": false,
-      "topics": ["ai", "rag", "local-first", "hermes", "privacy"],
-      "license": "MIT",
-      "visibility": "private",
-      "default_branch": "main",
-      "latest_release": {"tag": "0.4.1", "published": "2026-06-20T00:00:00Z", "name": "v0.4.1"},
-      "languages_top5": ["Python", "TypeScript", "Shell"],
-      "commits_7d": 5
-    },
-    {
-      "name": "synapse-engine",
-      "description": "LLM workshop — load, benchmark, finetune, abliterate. Modular prototypes.",
-      "homepage": "",
-      "language": "Python",
-      "language_url": "https://github.com/dlorp/synapse-engine",
-      "stars": 1,
-      "forks": 0,
-      "watchers": 1,
-      "open_issues": 3,
-      "size_kb": 28400,
-      "created_at": "2025-11-01T00:00:00Z",
-      "updated_at": "2026-07-02T10:00:00Z",
-      "pushed_at": "2026-07-02T10:00:00Z",
-      "archived": false,
-      "disabled": false,
-      "topics": ["llm", "benchmark", "finetuning", "local-inference"],
-      "license": "MIT",
-      "visibility": "private",
-      "default_branch": "main",
-      "latest_release": {"tag": "", "published": "", "name": ""},
-      "languages_top5": ["Python", "C++", "CUDA"],
-      "commits_7d": 2
-    },
-    {
-      "name": "myc3lium",
-      "description": "FastAPI + Reticulum + Meshtastic mesh bridge",
-      "homepage": "",
-      "language": "Python",
-      "language_url": "https://github.com/dlorp/myc3lium",
-      "stars": 0,
-      "forks": 0,
-      "watchers": 1,
-      "open_issues": 1,
-      "size_kb": 12800,
-      "created_at": "2026-01-10T00:00:00Z",
-      "updated_at": "2026-07-04T08:00:00Z",
-      "pushed_at": "2026-07-04T08:00:00Z",
-      "archived": false,
-      "disabled": false,
-      "topics": ["mesh", "meshtastic", "reticulum", "iot"],
-      "license": "MIT",
-      "visibility": "private",
-      "default_branch": "main",
-      "latest_release": {"tag": "", "published": "", "name": ""},
-      "languages_top5": ["Python", "C"],
-      "commits_7d": 8
-    }
-  ],
-  "generated_at": "2026-07-05T08:00:00Z"
-}
+{"repos":[
+{"archived": false, "created_at": "2026-06-11T09:54:30Z", "default_branch": "feature/3d-screenshot", "description": "3D screenshots in DuckStation", "disabled": false, "forks": 0, "homepage": "", "language": "C++", "language_url": "", "license": "GPL-3.0", "name": "psx2blend", "open_issues": 0, "pushed_at": "2026-06-29T22:10:13Z", "size_kb": 67791, "stars": 0, "topics": [], "updated_at": "2026-06-29T22:10:11Z", "visibility": "public", "watchers": 0, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": ["C++", "C", "M4", "Yacc", "CMake"], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2026-02-15T21:10:12Z", "default_branch": "main", "description": "Phase Engine transforms your Sensor Watch into a circadian awareness tool, tracking your daily rhythm through four natural phases and providing intelligent feedback to optimize your energy and productivity.", "disabled": false, "forks": 0, "homepage": "", "language": "C", "language_url": "", "license": "MIT", "name": "phase-engine", "open_issues": 0, "pushed_at": "2026-06-21T03:32:18Z", "size_kb": 50212, "stars": 0, "topics": [], "updated_at": "2026-06-29T07:20:25Z", "visibility": "public", "watchers": 0, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": ["C", "HTML", "C++", "Python", "Shell"], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2022-02-17T06:26:15Z", "default_branch": "master", "description": "Mac Emulator for Vita", "disabled": false, "forks": 0, "homepage": "", "language": "", "language_url": "", "license": "GPL-2.0", "name": "basiliskii-vita", "open_issues": 0, "pushed_at": "2021-04-06T17:06:05Z", "size_kb": 2145, "stars": 0, "topics": [], "updated_at": "2021-09-06T17:37:53Z", "visibility": "public", "watchers": 0, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": ["C++", "C", "M4", "Objective-C++", "Makefile"], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2021-07-31T17:03:42Z", "default_branch": "master", "description": "\ud83c\udf71 Minimalist, elegant and simple startpage inspired by the Bento box!", "disabled": false, "forks": 0, "homepage": "https://migueravila.github.io/Bento/", "language": "", "language_url": "", "license": "", "name": "Bento", "open_issues": 0, "pushed_at": "2021-07-25T16:16:43Z", "size_kb": 12447, "stars": 0, "topics": [], "updated_at": "2021-07-31T17:03:50Z", "visibility": "public", "watchers": 0, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": ["JavaScript", "CSS", "HTML"], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2019-08-18T20:57:56Z", "default_branch": "master", "description": "", "disabled": false, "forks": 0, "homepage": "", "language": "", "language_url": "", "license": "", "name": "dlorp.github.io", "open_issues": 0, "pushed_at": "2019-08-18T21:11:34Z", "size_kb": 2, "stars": 0, "topics": [], "updated_at": "2019-08-18T21:11:35Z", "visibility": "public", "watchers": 1, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": [], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2019-08-18T19:48:08Z", "default_branch": "master", "description": "First Steps", "disabled": false, "forks": 0, "homepage": "", "language": "", "language_url": "", "license": "", "name": "hello-world", "open_issues": 0, "pushed_at": "2019-08-18T20:03:20Z", "size_kb": 1, "stars": 0, "topics": [], "updated_at": "2019-08-18T19:48:11Z", "visibility": "public", "watchers": 1, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": [], "commits_7d": 0}
+,
+{"archived": false, "created_at": "2019-08-18T19:38:41Z", "default_branch": "master", "description": "", "disabled": false, "forks": 0, "homepage": "", "language": "", "language_url": "", "license": "", "name": "uhh", "open_issues": 0, "pushed_at": "2019-08-18T19:38:43Z", "size_kb": 0, "stars": 0, "topics": [], "updated_at": "2019-08-18T19:38:44Z", "visibility": "public", "watchers": 1, "latest_release": {"tag": "", "published": "", "name": ""}, "languages_top5": [], "commits_7d": 0}
+]}
