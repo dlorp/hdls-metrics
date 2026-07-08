@@ -213,9 +213,9 @@ svg_parts.append(f'''  <filter id="knotglow" x="-20%" y="-20%" width="140%" heig
     <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
   </filter>''')
 
-# Scanline pattern
+# Scanline pattern - use Root Dark for scanlines, not pure black
 svg_parts.append(f'''  <pattern id="scanlines" x="0" y="0" width="1" height="3" patternUnits="userSpaceOnUse">
-    <rect x="0" y="0" width="1" height="1" fill="#000000" opacity="0.3"/>
+    <rect x="0" y="0" width="1" height="1" fill="#0E0B02" opacity="0.3"/>
   </pattern>''')
 
 # Vignette gradient
@@ -237,45 +237,45 @@ svg_parts.append(f'''  <mask id="caMask">
 
 svg_parts.append(f'</defs>')
 
-# Background
-svg_parts.append(f'<rect x="0" y="0" width="{W}" height="{H}" fill="#0a0a0a"/>')
+# Background - Root Dark from myc3lium brand register
+svg_parts.append(f'<rect x="0" y="0" width="{W}" height="{H}" fill="#0E0B02"/>')
 
-# Rule 30 CA texture
+# Rule 30 CA texture - Amber Primary #FFB800
 svg_parts.append(f'<g mask="url(#caMask)" opacity="0.35">')
-svg_parts.append(f'<path d="{ca_path}" fill="#ff9500"/>')
+svg_parts.append(f'<path d="{ca_path}" fill="#FFB800"/>')
 svg_parts.append(f'</g>')
 
 # HDLS text — big, monospace, amber phosphor
-# Main title
+# Main title - Amber Primary #FFB800
 svg_parts.append(f'''<text x="80" y="175" font-family="Courier New, monospace" font-size="96" font-weight="bold"
-  fill="#ff9500" letter-spacing="8" filter="url(#glow)">HDLS</text>''')
+  fill="#FFB800" letter-spacing="8" filter="url(#glow)">HDLS</text>''')
 
-# Subtitle / tagline
+# Subtitle / tagline - Amber Tertiary #C47A00
 svg_parts.append(f'''<text x="84" y="215" font-family="Courier New, monospace" font-size="13"
-  fill="#b36800" letter-spacing="3" opacity="0.8">HOUSE OF THE DISTRIBUTED LEARNING SYSTEM</text>''')
+  fill="#C47A00" letter-spacing="3" opacity="0.8">HOUSE OF THE DISTRIBUTED LEARNING SYSTEM</text>''')
 
-# Decorative line under text
-svg_parts.append(f'<line x1="80" y1="232" x2="520" y2="232" stroke="#ff9500" stroke-width="0.5" opacity="0.4"/>')
+# Decorative line under text - Amber Secondary #E88A00
+svg_parts.append(f'<line x1="80" y1="232" x2="520" y2="232" stroke="#E88A00" stroke-width="0.5" opacity="0.4"/>')
 
-# Small annotations (BBS-style)
+# Small annotations (BBS-style) - Amber Dim #7A5200
 svg_parts.append(f'''<text x="80" y="255" font-family="Courier New, monospace" font-size="10"
-  fill="#663d00" letter-spacing="1" opacity="0.6">// amber_phosphor // trefoil_knot // rule30_ca</text>''')
+  fill="#7A5200" letter-spacing="1" opacity="0.6">// amber_phosphor // trefoil_knot // rule30_ca</text>''')
 
 svg_parts.append(f'''<text x="80" y="272" font-family="Courier New, monospace" font-size="10"
-  fill="#663d00" letter-spacing="1" opacity="0.5">/// distribute_impurity_evenly</text>''')
+  fill="#7A5200" letter-spacing="1" opacity="0.5">/// distribute_impurity_evenly</text>''')
 
 
-# Trefoil knot
+# Trefoil knot - using brand amber spectrum
 svg_parts.append(f'<g filter="url(#knotglow)">')
-# Shadow/back layer — slightly offset, darker
+# Shadow/back layer — Amber Trace #3D2900
 for d in knot_paths:
-    svg_parts.append(f'<path d="{d}" fill="none" stroke="#3d2400" stroke-width="5" stroke-linecap="round" opacity="0.6"/>')
-# Main knot strokes
+    svg_parts.append(f'<path d="{d}" fill="none" stroke="#3D2900" stroke-width="5" stroke-linecap="round" opacity="0.6"/>')
+# Main knot strokes - Amber Primary #FFB800
 for d in knot_paths:
-    svg_parts.append(f'<path d="{d}" fill="none" stroke="#ff9500" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>')
-# Inner highlight
+    svg_parts.append(f'<path d="{d}" fill="none" stroke="#FFB800" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>')
+# Inner highlight - Amber Hot #FFD060
 for d in knot_paths:
-    svg_parts.append(f'<path d="{d}" fill="none" stroke="#ffcc66" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>')
+    svg_parts.append(f'<path d="{d}" fill="none" stroke="#FFD060" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>')
 svg_parts.append(f'</g>')
 
 # Scanline overlay
@@ -284,8 +284,8 @@ svg_parts.append(f'<rect x="0" y="0" width="{W}" height="{H}" fill="url(#scanlin
 # Vignette
 svg_parts.append(f'<rect x="0" y="0" width="{W}" height="{H}" fill="url(#vignette)"/>')
 
-# Corner markers (demoscene frame ticks)
-tick = '#ff9500'
+# Corner markers (demoscene frame ticks) - Amber Primary
+tick = '#FFB800'
 tw = 12
 # Top-left
 svg_parts.append(f'<polyline points="10,10 10,{10+tw} {10+tw},10" fill="none" stroke="{tick}" stroke-width="0.5" opacity="0.4"/>')
@@ -296,9 +296,9 @@ svg_parts.append(f'<polyline points="10,{H-10} 10,{H-10-tw} {10+tw},{H-10}" fill
 # Bottom-right
 svg_parts.append(f'<polyline points="{W-10},{H-10} {W-10},{H-10-tw} {W-10-tw},{H-10}" fill="none" stroke="{tick}" stroke-width="0.5" opacity="0.4"/>')
 
-# Bottom-right timestamp / sigil
+# Bottom-right timestamp / sigil - Amber Dim
 svg_parts.append(f'''<text x="{W-20}" y="{H-18}" font-family="Courier New, monospace" font-size="9"
-  fill="#4d2e00" text-anchor="end" opacity="0.5">1280x320 // TREFOIL // RULE30 // v2</text>''')
+  fill="#7A5200" text-anchor="end" opacity="0.5">1280x320 // TREFOIL // RULE30 // v3</text>''')
 
 svg_parts.append(f'</svg>')
 
