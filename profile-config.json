@@ -1,5 +1,5 @@
 {
-  "_comment": "AGENT/HUMAN-OWNED profile content. generate-profile-readme.py renders dlorp/dlorp's README from this file — it never invents badge values or a banner. Edit badges/banner/copy here; the daily workflow redeploys. The banner IMAGE (hdls-banner.png) is pinned in dlorp/dlorp and is NOT deployed by the workflow. Badge tuples are [label, message, color, alt]; label \"\" means a message-only badge.",
+  "_comment": "AGENT/HUMAN-OWNED profile content. generate-profile-readme.py renders dlorp/dlorp's README from this file \u2014 it never invents badge values or a banner. Edit badges/banner/copy here; the daily workflow redeploys. The banner IMAGE (hdls-banner.png) is pinned in dlorp/dlorp and is NOT deployed by the workflow. Badge tuples are [label, message, color, alt]; label \"\" means a message-only badge.",
   "banner": "./hdls-banner.png",
   "intro": [
     "A signal chain research collective. We preserve vanishing knowledge with",
@@ -11,10 +11,30 @@
       "name": "synapse-engine",
       "url": "https://github.com/dlorp/synapse-engine",
       "badges": [
-        ["status", "active", "ff9500", "status"],
-        ["stack", "Python | C++ | CUDA", "CC8800", "stack"],
-        ["last commit", "recent", "ff9500", "last commit"],
-        ["language", "C++", "CC8800", "language"]
+        [
+          "status",
+          "active",
+          "ff9500",
+          "status"
+        ],
+        [
+          "stack",
+          "Python | C++ | CUDA",
+          "CC8800",
+          "stack"
+        ],
+        [
+          "last commit",
+          "recent",
+          "ff9500",
+          "last commit"
+        ],
+        [
+          "language",
+          "C++",
+          "CC8800",
+          "language"
+        ]
       ],
       "desc": "LLM workshop: load, benchmark, finetune, and abliterate local models. Modular prototype system where each stage of the model lifecycle is a separate, swappable component. Built to make smaller models viable in the field."
     },
@@ -22,10 +42,30 @@
       "name": "myc3lium",
       "url": "https://github.com/dlorp/myc3lium",
       "badges": [
-        ["status", "active", "ff9500", "status"],
-        ["stack", "Python | C", "CC8800", "stack"],
-        ["last commit", "recent", "ff9500", "last commit"],
-        ["language", "C", "CC8800", "language"]
+        [
+          "status",
+          "active",
+          "ff9500",
+          "status"
+        ],
+        [
+          "stack",
+          "Python | C",
+          "CC8800",
+          "stack"
+        ],
+        [
+          "last commit",
+          "recent",
+          "ff9500",
+          "last commit"
+        ],
+        [
+          "language",
+          "C",
+          "CC8800",
+          "language"
+        ]
       ],
       "desc": "FastAPI bridge between Reticulum mesh networking and Meshtastic LoRa. Runs on ESP32 for low-power field deployment. Named after the underground network of fungal mycelium."
     },
@@ -33,40 +73,156 @@
       "name": "dr3dg3-n3t",
       "url": "https://github.com/dlorp/dr3dg3-n3t",
       "badges": [
-        ["status", "active", "ff9500", "status"],
-        ["stack", "HTML | JSON | preservation", "CC8800", "stack"],
-        ["last commit", "recent", "ff9500", "last commit"],
-        ["type", "whole earth catalog", "CC8800", "type"]
+        [
+          "status",
+          "active",
+          "ff9500",
+          "status"
+        ],
+        [
+          "stack",
+          "HTML | JSON | preservation",
+          "CC8800",
+          "stack"
+        ],
+        [
+          "last commit",
+          "recent",
+          "ff9500",
+          "last commit"
+        ],
+        [
+          "type",
+          "whole earth catalog",
+          "CC8800",
+          "type"
+        ]
       ],
-      "desc": "Offline internet — a \"Web 3.0 Whole Earth Catalog\" for preserving knowledge that matters. Curated snapshots of vanishing sources, structured for browsing without a connection."
+      "desc": "Offline internet \u2014 a \"Web 3.0 Whole Earth Catalog\" for preserving knowledge that matters. Curated snapshots of vanishing sources, structured for browsing without a connection."
     }
   ],
   "other_projects": [
-    {"name": "r3LAY", "url": "https://github.com/dlorp/r3LAY",
-     "desc": "Local-first research terminal for hobbyists — maintenance logging, natural language input, RAG search across your docs",
-     "stack": ["Python", "Shell"], "status": ["active", "ff9500"]},
-    {"name": "phase-engine", "url": "https://github.com/dlorp/phase-engine",
-     "desc": "Circadian awareness tool for Sensor Watch — four natural phases, intelligent feedback. Bangle.js 2 for testing, f91W custom firmware is the target",
-     "stack": ["C", "C++", "Python"], "status": ["active", "ff9500"]},
-    {"name": "t3rra1n", "url": "https://github.com/dlorp/t3rra1n",
-     "desc": "Terminal UI that doubles as an immersive ARG — field reports from a stranded HDLS researcher documenting alien landscapes",
-     "stack": ["Python"], "status": ["active", "ff9500"]},
-    {"name": "heedless.net", "url": "https://github.com/dlorp/heedless.net",
-     "desc": "HDLS domain — public-facing site",
-     "stack": ["HTML"], "status": ["active", "ff9500"]},
-    {"name": "knowledge-vault", "url": "https://github.com/dlorp/knowledge-vault",
-     "desc": "3100+ entries across 52 domains — the collective memory",
-     "stack": ["Markdown"], "status": ["active", "ff9500"]},
-    {"name": "vault-crawler", "url": "https://github.com/dlorp/vault-crawler",
-     "desc": "Automated source intake for the knowledge vault",
-     "stack": ["Python"], "status": ["active", "ff9500"]}
+    {
+      "name": "r3LAY",
+      "url": "https://github.com/dlorp/r3LAY",
+      "desc": "Local-first research terminal for hobbyists \u2014 maintenance logging, natural language input, RAG search across your docs",
+      "stack": [
+        "Python",
+        "Shell"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "phase-engine",
+      "url": "https://github.com/dlorp/phase-engine",
+      "desc": "Circadian awareness tool for Sensor Watch \u2014 four natural phases, intelligent feedback. Bangle.js 2 for testing, f91W custom firmware is the target",
+      "stack": [
+        "C",
+        "C++",
+        "Python"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "t3rra1n",
+      "url": "https://github.com/dlorp/t3rra1n",
+      "desc": "Terminal UI that doubles as an immersive ARG \u2014 field reports from a stranded HDLS researcher documenting alien landscapes",
+      "stack": [
+        "Python"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "heedless.net",
+      "url": "https://github.com/dlorp/heedless.net",
+      "desc": "HDLS domain \u2014 public-facing site",
+      "stack": [
+        "HTML"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "knowledge-vault",
+      "url": "https://github.com/dlorp/knowledge-vault",
+      "desc": "3700+ entries across 69 domains \u2014 the collective memory",
+      "stack": [
+        "Markdown"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "vault-crawler",
+      "url": "https://github.com/dlorp/vault-crawler",
+      "desc": "Automated source intake for the knowledge vault",
+      "stack": [
+        "Python"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    },
+    {
+      "name": "openclaw-dash",
+      "url": "https://github.com/dlorp/openclaw-dash",
+      "desc": "Lightweight monitoring cockpit \u2014 plugin data sources, MQTT sink for ESP32/OLED panels",
+      "stack": [
+        "Python",
+        "Textual",
+        "Rich"
+      ],
+      "status": [
+        "active",
+        "ff9500"
+      ]
+    }
   ],
   "what_we_do": "preserve                 build                   research\n   |                       |                       |\ndr3dg3-n3t            synapse-engine          small LLMs\noffline internet      model workshop          in the field\n   |                       |                       |\n   +-----------+-----------+-----------+-----------+\n               |\n            HDLS lab\n     hardware we own\n     no cloud, no keys",
   "metrics": [
-    ["repos", "18", "ff9500", "repos"],
-    ["languages", "Python | C++ | C | JavaScript", "CC8800", "languages"],
-    ["vault entries", "3100+", "7A5200", "vault entries"],
-    ["domains", "52", "7A5200", "domains"]
+    [
+      "repos",
+      "19",
+      "ff9500",
+      "repos"
+    ],
+    [
+      "languages",
+      "Python | C++ | C | CircuitPython",
+      "CC8800",
+      "languages"
+    ],
+    [
+      "vault entries",
+      "3700+",
+      "7A5200",
+      "vault entries"
+    ],
+    [
+      "domains",
+      "69",
+      "7A5200",
+      "domains"
+    ]
   ],
-  "footer": ["HDLS", "research collective", "ff9500", "HDLS"]
+  "footer": [
+    "HDLS",
+    "research collective",
+    "ff9500",
+    "HDLS"
+  ]
 }
