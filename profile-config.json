@@ -180,7 +180,7 @@
     {
       "name": "openclaw-dash",
       "url": "https://github.com/dlorp/openclaw-dash",
-      "desc": "Lightweight monitoring cockpit \u2014 plugin data sources, MQTT sink for ESP32/OLED panels",
+      "desc": "Hermes Agent monitoring cockpit \u2014 plugin data sources, MQTT sink for ESP32/OLED panels",
       "stack": [
         "Python",
         "Textual",
