@@ -135,12 +135,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
           # Clone the profile repo (dlorp/dlorp)
           git clone "https://x-access-token:${GH_TOKEN}@github.com/dlorp/dlorp.git" /tmp/dlorp-profile
           cd /tmp/dlorp-profile
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Deploy the generated README ONLY. The banner image
           # (hdls-banner.png) is manually / agent-owned in dlorp/dlorp and is
