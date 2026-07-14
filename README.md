@@ -1,5 +1,10 @@
 # hdls-metrics
 
+[![CI](https://img.shields.io/github/actions/workflow/status/dlorp/hdls-metrics/daily-scan.yml?label=CI&color=ff9500)](https://github.com/dlorp/hdls-metrics/actions)
+[![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-ff9500)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10+-ff9500)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/platform-GitHub%20Actions-ff9500)](https://github.com/dlorp/hdls-metrics)
+
 Daily automated scan of [dlorp](https://github.com/dlorp) repositories. Collects stars, forks, commit frequency, releases, language breakdown, and more.
 
 ## Data
@@ -39,3 +44,25 @@ The knowledge vault's `repo-cards-update` cron reads `repo-data.json` to keep va
 3. Update `.github/workflows/daily-scan.yml` to use `${{ secrets.PAT_TOKEN }}` instead of `${{ secrets.GITHUB_TOKEN }}` (if scanning private repos)
 
 > **Note:** `GITHUB_TOKEN` only has access to the current repo. For cross-repo scanning of private repos, a PAT or GitHub App token is required.
+
+## Contributing
+
+Banner generation scripts are in the repo root. Run with Python 3.10+.
+
+## License
+
+PolyForm Noncommercial 1.0.0. See [LICENSE](LICENSE).
+
+## HDLS
+
+hdls-metrics is part of the [HDLS](https://hdls.net) knowledge system. Automated repository metrics collection via GitHub Actions.
+
+| Component | Role |
+|-----------|------|
+| **dr3dg3** | Source monitor, crawler, raw intake |
+| **pr0b3** | Deep-work researcher, vault contributor |
+| **g0blin** | Vault gatekeeper, triage, promotion |
+| **s3ntry** | Security auditor, threat research |
+| **3tch** | Code implementation, debugging |
+| **0r4cl3** | Brand coherence, design review |
+| **hyph4** | Pipeline overseer, coordinator |
