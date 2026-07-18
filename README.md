@@ -1,9 +1,11 @@
 # hdls-metrics
 
+[![Version](https://img.shields.io/badge/version-latest-ff9500)]()
 [![CI](https://img.shields.io/github/actions/workflow/status/dlorp/hdls-metrics/daily-scan.yml?label=CI&color=ff9500)](https://github.com/dlorp/hdls-metrics/actions)
 [![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-ff9500)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-ff9500)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/platform-GitHub%20Actions-ff9500)](https://github.com/dlorp/hdls-metrics)
+[![Tests](https://img.shields.io/badge/tests-none-lightgrey)]()
 
 Daily automated scan of [dlorp](https://github.com/dlorp) repositories. Collects stars, forks, commit frequency, releases, language breakdown, and more.
 
@@ -55,7 +57,7 @@ PolyForm Noncommercial 1.0.0. See [LICENSE](LICENSE).
 
 ## HDLS
 
-hdls-metrics is part of the [HDLS](https://hdls.net) knowledge system. Automated repository metrics collection via GitHub Actions.
+hdls-metrics is part of the [HDLS](https://hdls.net) knowledge system. Daily automated repository metrics collection and fleet health monitoring.
 
 | Component | Role |
 |-----------|------|
