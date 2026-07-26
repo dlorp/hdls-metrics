@@ -18,10 +18,12 @@ jobs:
           fetch-depth: 0
 
       - name: Check commit attribution
+        env:
+          AGENT_DENYLIST: ${{ secrets.AGENT_DENYLIST }}
         run: |
           echo "=== HDLS Attribution Check ==="
           BLOCKED=0
-          AGENT_NAMES="hyph4 pr0b3 3tch s3ntry dr3dg3 g0blin 0r4cl3 r3nd3r spl1c3 lorpBot lorpbot"
+          AGENT_NAMES="$AGENT_DENYLIST"
           DISCLOSURE_PATTERNS=(
             "hdls agent" "hdls pipeline" "agent pipeline" "multi-agent"
             "agent workflow" "llm agent" "claude code" "ai-generated" "ai assisted"
