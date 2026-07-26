@@ -154,6 +154,11 @@ jobs:
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
 
           for file in $CHANGED_FILES; do
+            # Skip this workflow's own file — it legitimately contains these
+            # strings as its denylist definition, not an actual usage.
+            if [[ "$file" == .github/workflows/hdls-attribution-guard.yml ]]; then
+              continue
+            fi
             if [ -f "$file" ]; then
               for proxy in "${BLOCKED_PROXIES[@]}"; do
                 if grep -q "$proxy" "$file" 2>/dev/null; then
