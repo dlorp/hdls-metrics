@@ -14,6 +14,8 @@ permissions:
 jobs:
   attribution-scan:
     runs-on: ubuntu-latest
+    env:
+      AGENT_DENYLIST: ${{ secrets.AGENT_DENYLIST }}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -24,10 +26,7 @@ jobs:
         run: |
           BLOCKED=()
 
-          AGENT_NAMES=(
-            "hyph4" "pr0b3" "3tch" "s3ntry" "dr3dg3" "g0blin" "0r4cl3"
-            "r3nd3r" "spl1c3" "lorpBot" "lorpbot"
-          )
+          read -ra AGENT_NAMES <<< "$AGENT_DENYLIST"
 
           DISCLOSURE_PATTERNS=(
             "hdls agent" "hdls pipeline" "agent pipeline" "multi-agent"
@@ -81,10 +80,7 @@ jobs:
           PRBODY
           )
 
-          AGENT_NAMES=(
-            "hyph4" "pr0b3" "3tch" "s3ntry" "dr3dg3" "g0blin" "0r4cl3"
-            "r3nd3r" "spl1c3" "lorpBot" "lorpbot"
-          )
+          read -ra AGENT_NAMES <<< "$AGENT_DENYLIST"
 
           for name in "${AGENT_NAMES[@]}"; do
             if echo "$PR_BODY" | grep -iq "$name"; then
@@ -158,6 +154,11 @@ jobs:
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
 
           for file in $CHANGED_FILES; do
+            # Skip this workflow's own file — it legitimately contains these
+            # strings as its denylist definition, not an actual usage.
+            if [[ "$file" == .github/workflows/hdls-attribution-guard.yml ]]; then
+              continue
+            fi
             if [ -f "$file" ]; then
               for proxy in "${BLOCKED_PROXIES[@]}"; do
                 if grep -q "$proxy" "$file" 2>/dev/null; then
