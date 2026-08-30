@@ -2,9 +2,9 @@
   "_comment": "AGENT/HUMAN-OWNED profile content. generate-profile-readme.py renders dlorp/dlorp's README from this file \u2014 it never invents badge values or a banner. Edit badges/banner/copy here; the daily workflow redeploys. The banner IMAGE (hdls-banner.png) is pinned in dlorp/dlorp and is NOT deployed by the workflow. Badge tuples are [label, message, color, alt]; label \"\" means a message-only badge.",
   "banner": "./hdls-banner.png",
   "intro": [
-    "A signal chain research collective. We preserve vanishing knowledge with",
-    "dr3dg3-n3t, build local AI tools with synapse-engine and myc3lium, and keep",
-    "smaller models viable in the field. Everything runs on hardware we own."
+    "A signal chain research collective. We build local AI infrastructure with synapse-engine,",
+    "off-grid mesh networks with myc3lium, and preserve vanishing knowledge with dr3dg3-n3t.",
+    "Everything runs on hardware we own \u2014 no cloud, no keys."
   ],
   "flagship": [
     {
@@ -36,7 +36,7 @@
           "language"
         ]
       ],
-      "desc": "LLM workshop: load, benchmark, finetune, and abliterate local models. Modular prototype system where each stage of the model lifecycle is a separate, swappable component. Built to make smaller models viable in the field."
+      "desc": "Distributed orchestration platform for local language models. Multi-tier LLM orchestration runs entirely on local hardware \u2014 no API keys required. v5.1.0."
     },
     {
       "name": "myc3lium",
@@ -50,7 +50,7 @@
         ],
         [
           "stack",
-          "Python | C",
+          "Python | C | Shell",
           "CC8800",
           "stack"
         ],
@@ -67,7 +67,7 @@
           "language"
         ]
       ],
-      "desc": "FastAPI bridge between Reticulum mesh networking and Meshtastic LoRa. Runs on ESP32 for low-power field deployment. Named after the underground network of fungal mycelium."
+      "desc": "Resilient off-grid mesh communication lattice. Triple-radio mesh (LoRa, WiFi HaLow, 802.11s), encrypted LXMF messaging, ATAK integration, live sensor feeds. Field-ready, operator-centric. v0.10.0."
     },
     {
       "name": "dr3dg3-n3t",
@@ -105,7 +105,7 @@
     {
       "name": "r3LAY",
       "url": "https://github.com/dlorp/r3LAY",
-      "desc": "Local-first research terminal for hobbyists \u2014 maintenance logging, natural language input, RAG search across your docs",
+      "desc": "Local-first project brain \u2014 natural language queries over project docs and notes, no cloud. 2371 tests passing. v0.13.0.",
       "stack": [
         "Python",
         "Shell"
@@ -132,7 +132,7 @@
     {
       "name": "t3rra1n",
       "url": "https://github.com/dlorp/t3rra1n",
-      "desc": "Terminal UI that doubles as an immersive ARG \u2014 field reports from a stranded HDLS researcher documenting alien landscapes",
+      "desc": "HDLS Procedural Generation Toolkit \u2014 terrain, noise, signal-chain aesthetics, PS1 rendering shaders. ARG component: field reports from a stranded HDLS researcher documenting alien landscapes. v0.2.1.",
       "stack": [
         "Python"
       ],
@@ -144,7 +144,7 @@
     {
       "name": "heedless.net",
       "url": "https://github.com/dlorp/heedless.net",
-      "desc": "HDLS domain \u2014 public-facing site",
+      "desc": "Personal site with HDLS amber CRT aesthetic \u2014 VT323 typography, #ff9500 palette, pure HTML/CSS/JS. No frameworks. v1.0.0.",
       "stack": [
         "HTML"
       ],
@@ -156,7 +156,7 @@
     {
       "name": "knowledge-vault",
       "url": "https://github.com/dlorp/knowledge-vault",
-      "desc": "3700+ entries across 69 domains \u2014 the collective memory",
+      "desc": "6830 entries across 153 domains \u2014 the collective memory",
       "stack": [
         "Markdown"
       ],
@@ -168,7 +168,7 @@
     {
       "name": "vault-crawler",
       "url": "https://github.com/dlorp/vault-crawler",
-      "desc": "Automated source intake for the knowledge vault",
+      "desc": "Personal knowledge acquisition engine \u2014 crawls web, PDFs, forums, GitHub, RSS, media. 150 tests passing. v0.3.0.",
       "stack": [
         "Python"
       ],
@@ -180,7 +180,7 @@
     {
       "name": "openclaw-dash",
       "url": "https://github.com/dlorp/openclaw-dash",
-      "desc": "Hermes Agent monitoring cockpit \u2014 plugin data sources, MQTT sink for ESP32/OLED panels",
+      "desc": "Hermes Agent monitoring cockpit \u2014 Textual TUI, plugin architecture, MQTT sink for ESP32/OLED panels. v0.4.0.",
       "stack": [
         "Python",
         "Textual",
@@ -208,13 +208,13 @@
     ],
     [
       "vault entries",
-      "3700+",
+      "6830",
       "7A5200",
       "vault entries"
     ],
     [
       "domains",
-      "69",
+      "153",
       "7A5200",
       "domains"
     ]
