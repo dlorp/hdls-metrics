@@ -68,6 +68,6 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.12'
-      - run: pip install ruff
+      - run: pip install ruff==0.15.21
       - name: Lint scripts
-        run: ruff check .github/scripts/ --output-format=github || true
+        run: ruff check .github/scripts/ --output-format=github
