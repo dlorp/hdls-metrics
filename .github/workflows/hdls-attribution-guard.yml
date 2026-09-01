@@ -1,3 +1,10 @@
+# HDLS Attribution Guard — canonical contract v2.0
+# Source of truth: knowledge-vault/_meta/lattice/hdls-attribution-guard.yml
+# Every dlorp repo copy MUST be byte-identical to this file. Divergence is
+# contract_propagation_gap and is caught by lattice-audit.py.
+# Version history:
+#   v1.0  original: actions/checkout@v4, PR_BODY heredoc
+#   v2.0  canonical: checkout pinned to v7.0.0 SHA, PR_BODY via step env
 # HDLS Attribution Guard — runs on every PR to dlorp repos
 # Blocks PRs with agent attribution, disclosure patterns, or direct vault domain writes.
 # Server-side enforcement: agents cannot bypass with --no-verify.
@@ -18,7 +25,7 @@ jobs:
       AGENT_DENYLIST: ${{ secrets.AGENT_DENYLIST }}
     steps:
       - name: Checkout PR
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
 
@@ -74,12 +81,9 @@ jobs:
           echo "✅ No attribution violations found"
 
       - name: Check for agent names in PR description
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          PR_BODY=$(cat <<'PRBODY'
-          ${{ github.event.pull_request.body }}
-          PRBODY
-          )
-
           read -ra AGENT_NAMES <<< "$AGENT_DENYLIST"
 
           for name in "${AGENT_NAMES[@]}"; do
