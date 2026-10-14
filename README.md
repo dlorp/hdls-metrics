@@ -1,7 +1,7 @@
 # hdls-metrics
 
 [![Version](https://img.shields.io/badge/version-latest-ff9500)]()
-[![CI](https://img.shields.io/github/actions/workflow/status/dlorp/hdls-metrics/daily-scan.yml?label=CI&color=ff9500)](https://github.com/dlorp/hdls-metrics/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/dlorp/hdls-metrics/ci.yml?label=CI&color=ff9500)](https://github.com/dlorp/hdls-metrics/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-PolyForm%20NC%201.0.0-ff9500)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-ff9500)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/platform-GitHub%20Actions-ff9500)](https://github.com/dlorp/hdls-metrics)
